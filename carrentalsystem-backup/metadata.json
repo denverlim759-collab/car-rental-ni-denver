@@ -1,0 +1,8 @@
+{
+  "name": "AutoMotion - Motor & Car Rental System",
+  "description": "Multi-role motor and car rental platform with dedicated portals for Customers, Staff, and Head Admin.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

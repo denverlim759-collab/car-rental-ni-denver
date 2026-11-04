@@ -1,0 +1,134 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and authentication record for customer, staff, or admin in AutoMotion",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique user identifier" },
+        "username": { "type": "string", "description": "Login username" },
+        "password": { "type": "string", "description": "User password hash or credential" },
+        "role": { "type": "string", "enum": ["customer", "staff", "admin"], "description": "Access level role" },
+        "fullName": { "type": "string", "description": "Full legal name" },
+        "email": { "type": "string", "format": "email", "description": "Email address" },
+        "phone": { "type": "string", "description": "Contact telephone number" },
+        "licenseNumber": { "type": "string", "description": "Driver license card or permit number" },
+        "licenseExpiry": { "type": "string", "description": "Driver license expiration date" },
+        "licenseImage": { "type": "string", "description": "Data URI or image URL of driver license" },
+        "address": { "type": "string", "description": "Residential or billing address" },
+        "verificationStatus": { "type": "string", "enum": ["verified", "pending", "rejected"], "description": "Staff identity verification status" },
+        "status": { "type": "string", "enum": ["active", "suspended", "banned"], "description": "Account operating state" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of account creation" },
+        "staffNotes": { "type": "string", "description": "Internal notes from staff inspection" }
+      },
+      "required": ["id", "username", "role", "fullName", "email", "phone", "verificationStatus", "status", "createdAt"]
+    },
+    "Vehicle": {
+      "title": "Vehicle",
+      "description": "Fleet asset (car or motorcycle) available for rental",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Vehicle asset identifier" },
+        "type": { "type": "string", "enum": ["car", "motorcycle"], "description": "Classification of vehicle" },
+        "make": { "type": "string", "description": "Vehicle manufacturer (e.g. Toyota, Yamaha)" },
+        "model": { "type": "string", "description": "Vehicle model name" },
+        "year": { "type": "number", "description": "Manufacturing year" },
+        "category": { 
+          "type": "string", 
+          "enum": ["sedan", "suv", "luxury", "sports", "electric", "cruiser", "sportbike", "scooter"],
+          "description": "Vehicle body style category"
+        },
+        "licensePlate": { "type": "string", "description": "Official vehicle license registration plate" },
+        "dailyRate": { "type": "number", "description": "Rental rate per day in Philippine Pesos" },
+        "hourlyRate": { "type": "number", "description": "Rental rate per hour in Philippine Pesos" },
+        "transmission": { "type": "string", "enum": ["Automatic", "Manual"], "description": "Gearbox type" },
+        "fuelType": { "type": "string", "enum": ["Gasoline", "Diesel", "Electric", "Hybrid"], "description": "Fuel or powertrain type" },
+        "seats": { "type": "number", "description": "Passenger seating capacity" },
+        "mileage": { "type": "number", "description": "Odometer reading in kilometers" },
+        "fuelLevel": { "type": "number", "description": "Current fuel tank percentage 0-100" },
+        "status": { 
+          "type": "string", 
+          "enum": ["available", "rented", "maintenance", "cleaning", "out_of_service"],
+          "description": "Current operational status of vehicle"
+        },
+        "imageUrl": { "type": "string", "description": "Photo of vehicle" },
+        "features": { "type": "array", "description": "Key equipment and amenity tags" },
+        "location": { "type": "string", "description": "Depot, branch or station location" },
+        "description": { "type": "string", "description": "Vehicle details overview" },
+        "maintenanceLog": { "type": "array", "description": "Log of routine maintenance and repairs" },
+        "damageReports": { "type": "array", "description": "Incident and damage reports" }
+      },
+      "required": ["id", "type", "make", "model", "year", "category", "licensePlate", "dailyRate", "status"]
+    },
+    "Rental": {
+      "title": "Rental",
+      "description": "Active, pending, or completed vehicle rental transaction",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Rental booking ID" },
+        "bookingCode": { "type": "string", "description": "Unique human-readable reservation reference" },
+        "userId": { "type": "string", "description": "Customer user identifier" },
+        "customerName": { "type": "string", "description": "Customer full name" },
+        "customerEmail": { "type": "string", "description": "Customer contact email" },
+        "customerPhone": { "type": "string", "description": "Customer contact mobile" },
+        "customerLicense": { "type": "string", "description": "Customer driver license number" },
+        "vehicleId": { "type": "string", "description": "Rented vehicle ID" },
+        "vehicleName": { "type": "string", "description": "Vehicle make and model title" },
+        "vehiclePlate": { "type": "string", "description": "Vehicle license plate" },
+        "vehicleType": { "type": "string", "enum": ["car", "motorcycle"], "description": "Car or motorcycle" },
+        "vehicleImage": { "type": "string", "description": "Image snapshot of rented vehicle" },
+        "startDate": { "type": "string", "description": "Rental start date" },
+        "endDate": { "type": "string", "description": "Rental end date" },
+        "days": { "type": "number", "description": "Rental duration in days" },
+        "pickupLocation": { "type": "string", "description": "Pickup branch location" },
+        "returnLocation": { "type": "string", "description": "Drop-off branch location" },
+        "dailyRate": { "type": "number", "description": "Daily rental charge in PHP" },
+        "subtotal": { "type": "number", "description": "Base rental fee subtotal in PHP" },
+        "insuranceFee": { "type": "number", "description": "Selected insurance protection fee in PHP" },
+        "addOnsTotal": { "type": "number", "description": "Total price of extra add-on services in PHP" },
+        "addOnsList": { "type": "array", "description": "Names of selected add-on amenities" },
+        "securityDeposit": { "type": "number", "description": "Refundable security deposit in PHP" },
+        "tax": { "type": "number", "description": "Applicable sales and vehicle tax in PHP" },
+        "totalAmount": { "type": "number", "description": "Grand total bill amount in PHP" },
+        "status": { "type": "string", "enum": ["active", "completed", "cancelled", "pending"], "description": "Rental progress status" },
+        "paymentStatus": { "type": "string", "enum": ["paid", "pending", "refunded"], "description": "Billing payment state" },
+        "paymentMethod": { "type": "string", "description": "Payment instrument used (e.g. GCash, Maya, Card)" },
+        "createdAt": { "type": "string", "description": "ISO timestamp when booking was created" },
+        "pickupDateTime": { "type": "string", "description": "ISO timestamp of scheduled pickup" },
+        "pickupDate": { "type": "string", "description": "Pickup calendar date YYYY-MM-DD" },
+        "pickupTime": { "type": "string", "description": "Pickup time HH:mm" },
+        "expectedReturnDateTime": { "type": "string", "description": "ISO timestamp of expected return schedule" },
+        "expectedReturnDate": { "type": "string", "description": "Expected return calendar date YYYY-MM-DD" },
+        "expectedReturnTime": { "type": "string", "description": "Expected return time HH:mm" },
+        "actualReturnDateTime": { "type": "string", "description": "ISO timestamp of actual vehicle check-in return" },
+        "gracePeriodMinutes": { "type": "number", "description": "Grace period policy in minutes (default 59)" },
+        "lateMinutes": { "type": "number", "description": "Elapsed late time in minutes between actual return and expected return" },
+        "chargeableLateHours": { "type": "number", "description": "Chargeable whole hours late for fee calculation" },
+        "lateReturnFee": { "type": "number", "description": "Automatic late return penalty fee in PHP (₱20/hour)" },
+        "baseRentalAmount": { "type": "number", "description": "Original rental price before late fees" },
+        "finalRentalAmount": { "type": "number", "description": "Final total amount due (baseRentalAmount + lateReturnFee)" },
+        "returnProcessed": { "type": "boolean", "description": "Flag indicating return has been audited and finalized" },
+        "returnProcessedAt": { "type": "string", "description": "ISO timestamp when return was processed" },
+        "returnProcessedBy": { "type": "string", "description": "Staff, Admin, or Customer ID who processed return" },
+        "returnNotes": { "type": "string", "description": "Staff or customer return inspection remarks" },
+        "returnMileage": { "type": "number", "description": "Odometer reading upon vehicle return" },
+        "returnFuelLevel": { "type": "number", "description": "Fuel percentage upon vehicle return" }
+      },
+      "required": ["id", "bookingCode", "userId", "vehicleId", "startDate", "endDate", "totalAmount", "status", "paymentStatus", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles, roles, credentials, and verification statuses"
+    },
+    "/vehicles/{vehicleId}": {
+      "schema": "Vehicle",
+      "description": "Fleet catalog of cars and motorcycles"
+    },
+    "/rentals/{rentalId}": {
+      "schema": "Rental",
+      "description": "Customer vehicle rental reservations and history"
+    }
+  }
+}

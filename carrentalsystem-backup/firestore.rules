@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Default Catch-All Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ID validation helper
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    // Connection health check route
+    match /test/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Users Collection (Accounts, staff, admin, customers)
+    match /users/{userId} {
+      allow read: if isValidId(userId);
+      allow create: if isValidId(userId) && request.resource.data.id == userId;
+      allow update: if isValidId(userId) && request.resource.data.id == userId;
+      allow delete: if isValidId(userId);
+    }
+
+    // Vehicles Collection (Fleet catalog)
+    match /vehicles/{vehicleId} {
+      allow read: if isValidId(vehicleId);
+      allow create: if isValidId(vehicleId) && request.resource.data.id == vehicleId;
+      allow update: if isValidId(vehicleId) && request.resource.data.id == vehicleId;
+      allow delete: if isValidId(vehicleId);
+    }
+
+    // Rentals Collection (Bookings & Reservations)
+    match /rentals/{rentalId} {
+      allow read: if isValidId(rentalId);
+      allow create: if isValidId(rentalId) && request.resource.data.id == rentalId;
+      allow update: if isValidId(rentalId) && request.resource.data.id == rentalId;
+      allow delete: if isValidId(rentalId);
+    }
+  }
+}
